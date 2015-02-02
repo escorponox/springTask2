@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
        xmlns:task="http://www.springframework.org/schema/task"
        xmlns:context="http://www.springframework.org/schema/context" xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd   http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
@@ -18,6 +19,31 @@
             </property>
             <property name="server" ref="mbeanServer"/>
         </bean>
+        <bean
+                class="org.springframework.jmx.support.ConnectorServerFactoryBean"
+                depends-on="rmiRegistry">
+            <property name="objectName" value="connector:name=rmi"/>
+            <property name="serviceUrl"
+                      value="service:jmx:rmi://localhost/jndi/rmi://localhost:1099/myconnector"/>
+        </bean>
+
+        <bean id="rmiRegistry"
+              class="org.springframework.remoting.rmi.RmiRegistryFactoryBean">
+            <property name="port" value="1099"/>
+        </bean>
+
+        <bean id="clientConnector" class="org.springframework.jmx.support.MBeanServerConnectionFactoryBean"
+              p:serviceUrl="service:jmx:rmi://localhost/jndi/rmi://localhost:1099/myconnector"/>
+
+        <bean id="serverManagerProxy" class="org.springframework.jmx.access.MBeanProxyFactoryBean"
+              p:objectName="tracer:name=mbeanTracer"
+              p:proxyInterface="scheduler.IMBeanTracer"
+              p:server-ref="clientConnector"/>
+
+        <bean id="tracerClient" class="scheduler.MBeanTracerClient">
+            <property name="beanTracer" ref="serverManagerProxy"/>
+        </bean>
+
     </beans>
 
 </beans>

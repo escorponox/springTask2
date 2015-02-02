@@ -1,11 +1,10 @@
-package jpa;
+package ejercicios;
 
+import jpa.BeanEntity;
+import jpa.BeanEntityDAO;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-/**
- * Created by Carlos Coves Prieto on 2/1/15.
- */
 public class Ejercicio1 {
 
     public static void main(String[] args) {

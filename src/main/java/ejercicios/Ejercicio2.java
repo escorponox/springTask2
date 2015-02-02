@@ -1,11 +1,8 @@
-package jpa;
+package ejercicios;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-/**
- * Created by Carlos Coves Prieto on 2/1/15.
- */
 public class Ejercicio2 {
 
 	public static void main(String[] args) {
